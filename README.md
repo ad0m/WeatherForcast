@@ -7,3 +7,7 @@ Using the OpenWeather API, this site allows one to search for a city of their ch
 <i>How the app will appear in the browser</i>
 
 ![alt text](assets/images/weatherforecast.png)
+
+### Deployed site URL:
+
+https://ad0m.github.io/WeatherForcast/
