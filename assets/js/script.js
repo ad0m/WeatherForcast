@@ -63,7 +63,8 @@ const renderHistory = () => {
   });
 };
 
-
+// Call the renderHistory function for the first time
+renderHistory();
 
 // Render the today weather
 const renderToday = data => {
