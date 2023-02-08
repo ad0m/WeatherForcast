@@ -40,6 +40,31 @@ searchForm.addEventListener("submit", e => {
     });
 });
 
+// Check if there's already data in local storage
+if (localStorage.getItem("cities")) {
+  cities = JSON.parse(localStorage.getItem("cities"));
+}
+
+// Render the history list
+const renderHistory = () => {
+  // Clear the history list
+  historyList.innerHTML = "";
+
+  // Render the buttons for each city
+  cities.forEach(city => {
+    const button = document.createElement("button");
+    button.innerHTML = city.name;
+    button.classList.add("btn", "btn-secondary", "btn-block", "mt-2");
+    button.addEventListener("click", () => {
+      renderToday(city);
+      renderForecast(city);
+    });
+    historyList.appendChild(button);
+  });
+};
+
+
+
 // Render the today weather
 const renderToday = data => {
   // Create the HTML for the today weather
@@ -86,4 +111,3 @@ const renderForecast = data => {
         forecastContainer.innerHTML = forecastHTML;
       });
   }
-  
