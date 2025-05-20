@@ -6,7 +6,7 @@ const todayContainer = document.querySelector("#today");
 const forecastContainer = document.querySelector("#forecast");
 
 // OpenWeatherMap API key
-const API_KEY = "ddf1883421a3125faedf18a9a05ab33e";
+import { API_KEY } from "./config.js";
 
 // Variables to store the weather data
 let cities = [];
