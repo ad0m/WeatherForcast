@@ -92,7 +92,9 @@ const renderForecast = data => {
       .then(response => response.json())
       .then(forecastData => {
         let forecastHTML = "";
-        for (let i = 0; i < 5; i++) {
+        // Show one forecast per day. Each day is 8 items apart in the API
+        // response (3 hour intervals). Limit the display to five days.
+        for (let i = 0, day = 0; i < forecastData.list.length && day < 5; i += 8, day++) {
           let forecast = forecastData.list[i];
           let date = moment.unix(forecast.dt).format("MM/DD/YYYY");
           let icon = forecast.weather[0].icon;
