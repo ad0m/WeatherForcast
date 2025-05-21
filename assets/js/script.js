@@ -102,7 +102,7 @@ const renderForecast = data => {
             <div class="col-lg-2">
               <div class="card p-2">
                 <h5>${date}</h5>
-                <img src="http://openweathermap.org/img/wn/${icon}@2x.png"/>
+                <img src="https://openweathermap.org/img/wn/${icon}@2x.png"/>
                 <p>Temp: ${temperature}°C</p>
                 <p>Humidity: ${humidity}%</p>
               </div>
