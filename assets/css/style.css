@@ -6,6 +6,16 @@
   --text-color: #333;
 }
 
+/*
+ * Wrapper element for central page content
+ * Limits width on large displays while staying responsive
+ */
+.wrapper {
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: var(--text-color);
