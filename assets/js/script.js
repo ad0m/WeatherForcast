@@ -54,7 +54,7 @@ const renderHistory = () => {
   cities.forEach(city => {
     const button = document.createElement("button");
     button.innerHTML = city.name;
-    button.classList.add("btn", "btn-secondary", "btn-block", "mt-2");
+    button.classList.add("btn", "btn-secondary", "w-100", "mt-2");
     button.addEventListener("click", () => {
       renderToday(city);
       renderForecast(city);
