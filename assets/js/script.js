@@ -11,38 +11,50 @@ const API_KEY = "ddf1883421a3125faedf18a9a05ab33e";
 // Variables to store the weather data
 let cities = [];
 
-// Listen for form submit event
-searchForm.addEventListener("submit", e => {
-  e.preventDefault();
-
-  // Get the city name from the input
-  const city = searchInput.value;
-
-  // Call the API
+const searchCity = name => {
   fetch(
-    `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}`
+    `https://api.openweathermap.org/data/2.5/weather?q=${name}&units=metric&appid=${API_KEY}`
   )
     .then(response => response.json())
     .then(data => {
-      // Store the city data in localStorage
-      cities.push(data);
+      const index = cities.findIndex(
+        c => c.name.toLowerCase() === data.name.toLowerCase()
+      );
+      if (index !== -1) {
+        cities[index] = data;
+      } else {
+        cities.push(data);
+      }
+
       localStorage.setItem("cities", JSON.stringify(cities));
 
-      // Render the city data
       renderToday(data);
       renderForecast(data);
-
-      // Clear the input value
-      searchInput.value = "";
-
-      // Render the history list
       renderHistory();
     });
+};
+
+// Listen for form submit event
+searchForm.addEventListener("submit", e => {
+  e.preventDefault();
+  const city = searchInput.value.trim();
+  if (!city) return;
+  searchCity(city);
+  searchInput.value = "";
 });
 
 // Check if there's already data in local storage
 if (localStorage.getItem("cities")) {
-  cities = JSON.parse(localStorage.getItem("cities"));
+  const stored = JSON.parse(localStorage.getItem("cities"));
+  const seen = {};
+  stored.forEach(city => {
+    const key = city.name.toLowerCase();
+    if (!seen[key]) {
+      seen[key] = city;
+    }
+  });
+  cities = Object.values(seen);
+  localStorage.setItem("cities", JSON.stringify(cities));
 }
 
 // Render the history list
@@ -56,8 +68,7 @@ const renderHistory = () => {
     button.innerHTML = city.name;
     button.classList.add("btn", "btn-secondary", "w-100", "mt-2");
     button.addEventListener("click", () => {
-      renderToday(city);
-      renderForecast(city);
+      searchCity(city.name);
     });
     historyList.appendChild(button);
   });
@@ -113,4 +124,4 @@ const renderForecast = data => {
         }
         forecastContainer.innerHTML = forecastHTML;
       });
-  }
+  };
