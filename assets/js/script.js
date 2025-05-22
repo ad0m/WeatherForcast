@@ -12,26 +12,30 @@ const API_KEY = "ddf1883421a3125faedf18a9a05ab33e";
 let cities = [];
 
 const searchCity = name => {
-  fetch(
-    `https://api.openweathermap.org/data/2.5/weather?q=${name}&units=metric&appid=${API_KEY}`
-  )
-    .then(response => response.json())
-    .then(data => {
-      const index = cities.findIndex(
-        c => c.name.toLowerCase() === data.name.toLowerCase()
-      );
-      if (index !== -1) {
-        cities[index] = data;
-      } else {
-        cities.push(data);
-      }
+  // Fetch the current conditions and five day forecast in one sequence
+  Promise.all([
+    fetch(
+      `https://api.openweathermap.org/data/2.5/weather?q=${name}&units=metric&appid=${API_KEY}`
+    ).then(response => response.json()),
+    fetch(
+      `https://api.openweathermap.org/data/2.5/forecast?q=${name}&units=metric&appid=${API_KEY}`
+    ).then(response => response.json())
+  ]).then(([current, forecast]) => {
+    const index = cities.findIndex(
+      c => c.name.toLowerCase() === current.name.toLowerCase()
+    );
+    if (index !== -1) {
+      cities[index] = current;
+    } else {
+      cities.push(current);
+    }
 
-      localStorage.setItem("cities", JSON.stringify(cities));
+    localStorage.setItem("cities", JSON.stringify(cities));
 
-      renderToday(data);
-      renderForecast(data);
-      renderHistory();
-    });
+    renderToday(current, forecast);
+    renderForecast(forecast);
+    renderHistory();
+  });
 };
 
 // Listen for form submit event
@@ -77,16 +81,17 @@ const renderHistory = () => {
 // Call the renderHistory function for the first time
 renderHistory();
 
-// Render the today weather
-const renderToday = data => {
+// Render the today weather. Accept both the current conditions and the forecast
+const renderToday = (current, forecast) => {
   // Create the HTML for the today weather
   const todayHTML = `
     <div class="card">
-      <h2 class="card-header">${data.name} (${moment().format("L")}) <i class="wi wi-owm-${data.weather[0].id}"></i></h2>
+      <h2 class="card-header">${current.name} (${moment().format("L")}) <i class="wi wi-owm-${current.weather[0].id}"></i></h2>
       <div class="card-body">
-        <p class="temperature">Temperature: ${data.main.temp} &#8451;</p>
-        <p class="humidity">Humidity: ${data.main.humidity} %</p>
-        <p class="wind">Wind Speed: ${data.wind.speed} m/s</p>
+        <p class="temperature">Temperature: ${current.main.temp} &#8451;</p>
+        <p class="humidity">Humidity: ${current.main.humidity} %</p>
+        <p class="wind">Wind Speed: ${current.wind.speed} m/s</p>
+        <p>Chance of Rain: ${Math.round(forecast.list[0].pop * 100)}%</p>
       </div>
     </div>
   `;
@@ -95,33 +100,28 @@ const renderToday = data => {
   todayContainer.innerHTML = todayHTML;
 };
 
-// Render the forecast weather
-const renderForecast = data => {
-    fetch(
-      `https://api.openweathermap.org/data/2.5/forecast?q=${data.name}&units=metric&appid=${API_KEY}`
-    )
-      .then(response => response.json())
-      .then(forecastData => {
-        let forecastHTML = "";
-        // Show one forecast per day. Each day is 8 items apart in the API
-        // response (3 hour intervals). Limit the display to five days.
-        for (let i = 0, day = 0; i < forecastData.list.length && day < 5; i += 8, day++) {
-          let forecast = forecastData.list[i];
-          let date = moment.unix(forecast.dt).format("MM/DD/YYYY");
-          let icon = forecast.weather[0].icon;
-          let temperature = forecast.main.temp;
-          let humidity = forecast.main.humidity;
-          forecastHTML += `
+// Render the forecast weather. Expects the forecast data object
+const renderForecast = forecastData => {
+    let forecastHTML = "";
+    // Show one forecast per day. Each day is 8 items apart in the API
+    // response (3 hour intervals). Limit the display to five days.
+    for (let i = 0, day = 0; i < forecastData.list.length && day < 5; i += 8, day++) {
+      let forecast = forecastData.list[i];
+      let date = moment.unix(forecast.dt).format("MM/DD/YYYY");
+      let icon = forecast.weather[0].icon;
+      let temperature = forecast.main.temp;
+      let humidity = forecast.main.humidity;
+      forecastHTML += `
             <div class="col-lg-2">
               <div class="card p-2">
                 <h5>${date}</h5>
                 <img src="https://openweathermap.org/img/wn/${icon}@2x.png"/>
                 <p>Temp: ${temperature}°C</p>
                 <p>Humidity: ${humidity}%</p>
+                <p>Chance of Rain: ${Math.round(forecast.pop * 100)}%</p>
               </div>
             </div>
           `;
-        }
-        forecastContainer.innerHTML = forecastHTML;
-      });
+    }
+    forecastContainer.innerHTML = forecastHTML;
   };
