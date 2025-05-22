@@ -6,8 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
   
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <!-- Updated CDN links for the latest versions -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
   <link rel="stylesheet" href="./assets/css/style.css" />
   <title>Weather Dashboard</title>
 </head>
@@ -25,16 +26,14 @@
           Search for a City:
         </h2>
         <form id="search-form" class="form">
-          <div class="form-inline form-group">
+          <div class="form-group">
             <div class="input-group">
               <input class="form-input weather-search" type="text" id="search-input" placeholder="London"
                 aria-labelledby="form-heading" aria-controls="today forecast" />
-              <div class="input-group-append">
-                <button type="submit" class="btn search-button" id="search-button" aria-label="submit search">
-                  Search
-                </button>
-                <hr class="hr weather-hr" />
-              </div>
+              <button type="submit" class="btn search-button" id="search-button" aria-label="submit search">
+                Search
+              </button>
+              <hr class="hr weather-hr" />
             </div>
           </div>
         </form>
