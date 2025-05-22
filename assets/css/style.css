@@ -56,8 +56,36 @@ header {
 
 #search-form button[type="submit"] {
   background-color: var(--accent-color);
-  color: white;
+  color: #fff;
   margin-left: 5px;
   border: none;
-  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s ease-in-out;
+}
+
+#search-form button[type="submit"]:hover,
+#search-form button[type="submit"]:focus {
+  background-color: var(--secondary-color);
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* History list buttons */
+#history button {
+  background-color: var(--accent-color) !important;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  text-align: left;
+  transition: background-color 0.2s ease-in-out;
+}
+
+#history button:hover,
+#history button:focus {
+  background-color: var(--secondary-color) !important;
+  color: #fff;
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
 }
