@@ -45,6 +45,22 @@ header {
   margin-bottom: 1rem;
 }
 
+/* Custom card used for today's weather */
+.weather-card {
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+}
+
+.weather-card .card-header,
+.weather-card .card-body {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.weather-icon {
+  font-size: 4rem;
+}
+
 #forecast .card {
   text-align: center;
 }

@@ -85,13 +85,16 @@ renderHistory();
 const renderToday = (current, forecast) => {
   // Create the HTML for the today weather
   const todayHTML = `
-    <div class="card">
-      <h2 class="card-header">${current.name} (${moment().format("L")}) <i class="wi wi-owm-${current.weather[0].id}"></i></h2>
-      <div class="card-body">
-        <p class="temperature">Temperature: ${current.main.temp} &#8451;</p>
-        <p class="humidity">Humidity: ${current.main.humidity} %</p>
-        <p class="wind">Wind Speed: ${current.wind.speed} m/s</p>
-        <p>Chance of Rain: ${Math.round(forecast.list[0].pop * 100)}%</p>
+    <div class="card weather-card" style="background-image:url('https://source.unsplash.com/600x400/?${current.name}')">
+      <h2 class="card-header bg-transparent">${current.name} (${moment().format("L")})</h2>
+      <div class="card-body d-flex justify-content-between align-items-center">
+        <div>
+          <p class="temperature mb-1">Temperature: ${current.main.temp} &#8451;</p>
+          <p class="humidity mb-1">Humidity: ${current.main.humidity} %</p>
+          <p class="wind mb-1">Wind Speed: ${current.wind.speed} m/s</p>
+          <p class="mb-0">Chance of Rain: ${Math.round(forecast.list[0].pop * 100)}%</p>
+        </div>
+        <i class="wi wi-owm-${current.weather[0].id} weather-icon"></i>
       </div>
     </div>
   `;
