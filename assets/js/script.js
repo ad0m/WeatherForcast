@@ -85,7 +85,7 @@ renderHistory();
 const renderToday = (current, forecast) => {
   // Create the HTML for the today weather
   const todayHTML = `
-    <div class="card weather-card" style="background-image:url('https://source.unsplash.com/600x400/?${current.name}')">
+    <div class="card weather-card" style="background-image:url('https://source.unsplash.com/600x400/?${encodeURIComponent(current.name)}')">
       <h2 class="card-header bg-transparent">${current.name} (${moment().format("L")})</h2>
       <div class="card-body d-flex justify-content-between align-items-center">
         <div>
