@@ -14,4 +14,4 @@ https://ad0m.github.io/WeatherForcast/
 
 ## Configuration
 
-Copy `assets/js/config.example.js` to `assets/js/config.js` and replace `YOUR_API_KEY_HERE` with your OpenWeather API key. The `config.js` file is ignored by Git so your personal key will remain private.
+Copy `assets/js/config.example.js` to `assets/js/config.js` and replace `YOUR_API_KEY_HERE` with your OpenWeather API key. You should also provide a `PIXABAY_KEY` for fetching city images. The `config.js` file is ignored by Git so your personal keys will remain private.
