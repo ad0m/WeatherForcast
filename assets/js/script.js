@@ -5,11 +5,27 @@ const historyList = document.querySelector("#history");
 const todayContainer = document.querySelector("#today");
 const forecastContainer = document.querySelector("#forecast");
 
-// OpenWeatherMap API key
-const API_KEY = "ddf1883421a3125faedf18a9a05ab33e";
+// Import API keys
+import { API_KEY, PIXABAY_KEY } from "./config.js";
 
 // Variables to store the weather data
 let cities = [];
+
+// Retrieve an image of the city from Pixabay or fall back to Unsplash
+const fetchCityImage = async city => {
+  const url =
+    `https://pixabay.com/api/?key=${PIXABAY_KEY}&q=${encodeURIComponent(city)}&image_type=photo&category=places&orientation=horizontal`;
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    if (data.hits && data.hits.length > 0) {
+      return data.hits[0].largeImageURL;
+    }
+  } catch (err) {
+    console.error("Failed to fetch Pixabay image", err);
+  }
+  return `https://source.unsplash.com/600x400/?${encodeURIComponent(city)}`;
+};
 
 const searchCity = name => {
   // Fetch the current conditions and five day forecast in one sequence
@@ -20,7 +36,7 @@ const searchCity = name => {
     fetch(
       `https://api.openweathermap.org/data/2.5/forecast?q=${name}&units=metric&appid=${API_KEY}`
     ).then(response => response.json())
-  ]).then(([current, forecast]) => {
+  ]).then(async ([current, forecast]) => {
     const index = cities.findIndex(
       c => c.name.toLowerCase() === current.name.toLowerCase()
     );
@@ -32,7 +48,7 @@ const searchCity = name => {
 
     localStorage.setItem("cities", JSON.stringify(cities));
 
-    renderToday(current, forecast);
+    await renderToday(current, forecast);
     renderForecast(forecast);
     renderHistory();
   });
@@ -82,10 +98,11 @@ const renderHistory = () => {
 renderHistory();
 
 // Render the today weather. Accept both the current conditions and the forecast
-const renderToday = (current, forecast) => {
+const renderToday = async (current, forecast) => {
+  const imageUrl = await fetchCityImage(current.name);
   // Create the HTML for the today weather
   const todayHTML = `
-    <div class="card weather-card" style="background-image:url('https://source.unsplash.com/600x400/?${encodeURIComponent(current.name)}')">
+    <div class="card weather-card" style="background-image:url('${imageUrl}')">
       <h2 class="card-header bg-transparent">${current.name} (${moment().format("L")})</h2>
       <div class="card-body d-flex justify-content-between align-items-center">
         <div>
